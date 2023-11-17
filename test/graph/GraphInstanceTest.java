@@ -1,6 +1,3 @@
-/* Copyright (c) 2015-2016 MIT 6.005 course staff, all rights reserved.
- * Redistribution of original or derived work requires permission of course staff.
- */
 package graph;
 
 import static org.junit.Assert.*;
@@ -23,18 +20,38 @@ public abstract class GraphInstanceTest {
 
     @Test(expected = AssertionError.class)
     public void testAssertionsEnabled() {
-        assert false; // make sure assertions are enabled with VM argument: -ea
+        assert false; // Ensure that assertions are enabled with VM argument: -ea
     }
 
     @Test
     public void testInitialVerticesEmpty() {
-        // Verify that a new graph has no vertices.
+        // Verify that a new graph has no vertices initially.
+        Graph<String> graph = emptyInstance();
         assertEquals("Expected new graph to have no vertices",
-                Collections.emptySet(), emptyInstance().vertices());
+                Collections.emptySet(), graph.vertices());
     }
+
+    /**
+     * Testing strategy document for Graph instance methods:
+     * 
+     * - Test adding a new vertex to the graph. i.e. test add()
+     * - Test attempting to add a duplicate vertex to the graph. i.e. test add()
+     * - Test adding a weighted directed edge between two vertices. i.e. test set()
+     * - Test removing a vertex and its incident edges from the graph. i.e. test
+     * remove()
+     * - Test attempting to remove a nonexistent vertex from the graph. i.e. test
+     * remove()
+     * - Test updating the weight of a directed edge in the graph. i.e. test set()
+     * - Test removing a weighted directed edge from the graph. i.e. test set()
+     * - Test retrieving source vertices and their weights for a target vertex. i.e.
+     * test sources()
+     * - Test retrieving target vertices and their weights for a source vertex. i.e.
+     * test targets()
+     */
 
     @Test
     public void testAddVertex() {
+        // Test adding a new vertex to the graph.
         Graph<String> graph = emptyInstance();
         assertTrue(graph.add("A"));
         assertTrue(graph.vertices().contains("A"));
@@ -42,6 +59,7 @@ public abstract class GraphInstanceTest {
 
     @Test
     public void testAddDuplicateVertex() {
+        // Test attempting to add a duplicate vertex to the graph.
         Graph<String> graph = emptyInstance();
         assertTrue(graph.add("A"));
         assertFalse(graph.add("A"));
@@ -49,6 +67,7 @@ public abstract class GraphInstanceTest {
 
     @Test
     public void testAddEdge() {
+        // Test adding a weighted directed edge between two vertices.
         Graph<String> graph = emptyInstance();
         graph.add("A");
         graph.add("B");
@@ -59,6 +78,7 @@ public abstract class GraphInstanceTest {
 
     @Test
     public void testRemoveVertex() {
+        // Test removing a vertex and its incident edges from the graph.
         Graph<String> graph = emptyInstance();
         graph.add("A");
         assertTrue(graph.remove("A"));
@@ -67,12 +87,14 @@ public abstract class GraphInstanceTest {
 
     @Test
     public void testRemoveNonexistentVertex() {
+        // Test attempting to remove a nonexistent vertex from the graph.
         Graph<String> graph = emptyInstance();
         assertFalse(graph.remove("A"));
     }
 
     @Test
     public void testSetEdgeWeight() {
+        // Test updating the weight of a directed edge in the graph.
         Graph<String> graph = emptyInstance();
         graph.add("A");
         graph.add("B");
@@ -82,6 +104,7 @@ public abstract class GraphInstanceTest {
 
     @Test
     public void testRemoveEdge() {
+        // Test removing a weighted directed edge from the graph.
         Graph<String> graph = emptyInstance();
         graph.add("A");
         graph.add("B");
@@ -93,6 +116,7 @@ public abstract class GraphInstanceTest {
 
     @Test
     public void testGetSources() {
+        // Test retrieving source vertices and their weights for a target vertex.
         Graph<String> graph = emptyInstance();
         graph.add("A");
         graph.add("B");
@@ -104,6 +128,7 @@ public abstract class GraphInstanceTest {
 
     @Test
     public void testGetTargets() {
+        // Test retrieving target vertices and their weights for a source vertex.
         Graph<String> graph = emptyInstance();
         graph.add("A");
         graph.add("B");
