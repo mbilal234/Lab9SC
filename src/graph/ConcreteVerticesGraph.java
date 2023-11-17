@@ -3,10 +3,7 @@
  */
 package graph;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An implementation of Graph.
@@ -67,28 +64,78 @@ public class ConcreteVerticesGraph implements Graph<String> {
  * TODO specification
  * Mutable.
  * This class is internal to the rep of ConcreteVerticesGraph.
- * 
- * <p>
- * PS2 instructions: the specification and implementation of this class is
+ *
+ * <p>PS2 instructions: the specification and implementation of this class is
  * up to you.
  */
 class Vertex {
 
-    // TODO fields
+    private final String label;
+    private final Map<Vertex, Integer> edges;
 
     // Abstraction function:
-    // TODO
+    //   Represents a mutable vertex with a label and outgoing edges.
+    //   The label is a unique identifier for the vertex.
+    //   The edges map stores the target vertices and their associated weights.
+
     // Representation invariant:
-    // TODO
+    //   - 'label' must not be null.
+    //   - 'edges' must not be null.
+    //   - All edge weights must be non-negative.
+
     // Safety from rep exposure:
-    // TODO
+    //   - 'label' and 'edges' are marked as private final.
+    //   - 'edges' is an immutable view of the internal data structure.
 
-    // TODO constructor
+    // Constructor
+    public Vertex(String label) {
+        if (label == null) {
+            throw new IllegalArgumentException("Vertex label cannot be null.");
+        }
+        this.label = label;
+        this.edges = new HashMap<>();
+        checkRep();
+    }
 
-    // TODO checkRep
+    // Check representation invariant
+    private void checkRep() {
+        if (label == null) {
+            throw new RuntimeException("Vertex label is null.");
+        }
+        if (edges == null) {
+            throw new RuntimeException("Vertex edges map is null.");
+        }
+        for (Map.Entry<Vertex, Integer> entry : edges.entrySet()) {
+            if (entry.getValue() < 0) {
+                throw new RuntimeException("Edge weight is negative.");
+            }
+        }
+    }
 
-    // TODO methods
+    public String getLabel() {
+        return label;
+    }
 
-    // TODO toString()
+    public Map<Vertex, Integer> getEdges() {
+        return Collections.unmodifiableMap(edges);
+    }
 
+    // Methods to add and remove edges
+    public void addEdge(Vertex target, int weight) {
+        edges.put(target, weight);
+        checkRep();
+    }
+
+    public void removeEdge(Vertex target) {
+        edges.remove(target);
+        checkRep();
+    }
+
+    @Override
+    public String toString() {
+        return "Vertex{" +
+                "label='" + label + '\'' +
+                ", edges=" + edges +
+                '}';
+    }
 }
