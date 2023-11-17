@@ -246,4 +246,20 @@ class Vertex {
                 ", edges=" + edges +
                 '}';
     }
+
+    public int getWeightTo(Vertex target) {
+        return edges.get(target);
+    }
+
+    public boolean hasTarget(Vertex target) {
+        return edges.containsKey(target);
+    }
+
+    public Map<Vertex, Integer> getSources() {
+        return edges;
+    }
+
+    public Map<Vertex, Integer> getTargets() {
+        return  edges;
+    }
 }

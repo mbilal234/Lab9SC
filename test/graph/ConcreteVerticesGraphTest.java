@@ -32,7 +32,7 @@ public class ConcreteVerticesGraphTest extends GraphInstanceTest {
     @Test
     public void testConcreteVerticesGraphToStringEmpty() {
         Graph<String> graph = emptyInstance();
-        assertEquals("Expected an empty graph representation", "[]", graph.toString());
+        assertEquals("Expected an empty graph representation", "", graph.toString());
     }
 
     @Test
@@ -41,7 +41,8 @@ public class ConcreteVerticesGraphTest extends GraphInstanceTest {
         graph.add("A");
         graph.add("B");
         graph.set("A", "B", 3);
-        String expected = "[A, B] -> [A -> B (3)]";
+        String expected = "Vertex{label='A', edges={Vertex{label='B', edges={}}=3}}\n" +
+                "Vertex{label='B', edges={}}\n";
         assertEquals("Expected a non-empty graph representation", expected, graph.toString());
     }
 
@@ -58,52 +59,57 @@ public class ConcreteVerticesGraphTest extends GraphInstanceTest {
 
     // TO BE MODIFIED ONCE VERTEX IS IMPLEMENTED
 
-    // @Test
-    // public void testVertexConstructor() {
-    // Vertex vertex = new Vertex("A");
-    // assertEquals("Vertex constructor should set the label", "A",
-    // vertex.getLabel());
-    // }
+     @Test
+     public void testVertexConstructor() {
+     Vertex vertex = new Vertex("A");
+     assertEquals("Vertex constructor should set the label", "A",
+     vertex.getLabel());
+     }
 
-    // @Test
-    // public void testVertexAddEdge() {
-    // Vertex vertex = new Vertex("A");
-    // vertex.addEdge("B", 2);
-    // assertTrue("Vertex should have a target vertex 'B'", vertex.hasTarget("B"));
-    // assertEquals("Edge weight from A to B should be 2", 2,
-    // vertex.getWeightTo("B"));
-    // }
+     @Test
+     public void testVertexAddEdge() {
+     Vertex vertex = new Vertex("A");
+     Vertex vertexB = new Vertex("B");
+     vertex.addEdge(vertexB, 2);
+     assertTrue("Vertex should have a target vertex 'B'", vertex.hasTarget(vertexB));
+     assertEquals("Edge weight from A to B should be 2", 2,
+     vertex.getWeightTo(vertexB));
+     }
 
-    // @Test
-    // public void testVertexRemoveEdge() {
-    // Vertex vertex = new Vertex("A");
-    // vertex.addEdge("B", 2);
-    // vertex.removeEdge("B");
-    // assertFalse("Vertex should not have a target vertex 'B'",
-    // vertex.hasTarget("B"));
-    // assertEquals("Edge weight from A to B should be 0", 0,
-    // vertex.getWeightTo("B"));
-    // }
+     @Test
+     public void testVertexRemoveEdge() {
+     Vertex vertex = new Vertex("A");
+     Vertex vertexB = new Vertex("B");
 
-    // @Test
-    // public void testVertexGetSources() {
-    // Vertex vertex = new Vertex("B");
-    // vertex.addEdge("A", 3);
-    // Map<String, Integer> sources = vertex.getSources();
-    // assertTrue("Vertex should have a source vertex 'A'",
-    // sources.containsKey("A"));
-    // assertEquals("Edge weight from A to B should be 3", 3,
-    // sources.get("A").intValue());
-    // }
+     vertex.addEdge(vertexB, 2);
+     vertex.removeEdge(vertexB);
+     assertFalse("Vertex should not have a target vertex 'B'",
+     vertex.hasTarget(vertexB));
 
-    // @Test
-    // public void testVertexGetTargets() {
-    // Vertex vertex = new Vertex("A");
-    // vertex.addEdge("B", 4);
-    // Map<String, Integer> targets = vertex.getTargets();
-    // assertTrue("Vertex should have a target vertex 'B'",
-    // targets.containsKey("B"));
-    // assertEquals("Edge weight from A to B should be 4", 4,
-    // targets.get("B").intValue());
-    // }
+     }
+
+     @Test
+     public void testVertexGetSources() {
+     Vertex vertex = new Vertex("B");
+     Vertex vertexA = new Vertex("A");
+     vertex.addEdge(vertexA, 3);
+     Map<Vertex, Integer> sources = vertex.getSources();
+     assertTrue("Vertex should have a source vertex 'A'",
+     sources.containsKey(vertexA));
+     assertEquals("Edge weight from A to B should be 3", 3,
+     sources.get(vertexA).intValue());
+     }
+
+     @Test
+     public void testVertexGetTargets() {
+     Vertex vertex = new Vertex("A");
+     Vertex vertexB = new Vertex("B");
+     vertex.addEdge(vertexB, 4);
+
+     Map<Vertex, Integer> targets = vertex.getTargets();
+     assertTrue("Vertex should have a target vertex 'B'",
+     targets.containsKey(vertexB));
+     assertEquals("Edge weight from A to B should be 4", 4,
+     targets.get(vertexB).intValue());
+     }
 }
