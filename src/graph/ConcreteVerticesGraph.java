@@ -10,7 +10,6 @@ import java.util.Set;
 
 /**
  * An implementation of Graph.
- *
  * <p>
  * PS2 instructions: you MUST use the provided rep.
  */
@@ -67,7 +66,7 @@ public class ConcreteVerticesGraph implements Graph<String> {
  * TODO specification
  * Mutable.
  * This class is internal to the rep of ConcreteVerticesGraph.
- *
+ 
  * <p>
  * PS2 instructions: the specification and implementation of this class is
  * up to you.
@@ -90,5 +89,6 @@ class Vertex {
     // TODO methods
 
     // TODO toString()
+
 
 }
