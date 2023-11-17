@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c9ea79b8-fcdb-403d-a031-6a0a7123cfd9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lab9SC.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Lab9SC.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/graph/ConcreteVerticesGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graph/ConcreteVerticesGraph.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,6 +68,7 @@
       <option name="presentableId" value="Default" />
       <updated>1700201805321</updated>
       <workItem from="1700201808198" duration="2225000" />
+      <workItem from="1700204064621" duration="578000" />
     </task>
     <servers />
   </component>
