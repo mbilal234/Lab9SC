@@ -216,8 +216,4 @@ class Edge {
         // No invariants to check in an immutable class
     }
 
-
-
-
-
 }
