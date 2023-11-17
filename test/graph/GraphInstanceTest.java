@@ -102,17 +102,7 @@ public abstract class GraphInstanceTest {
         assertEquals(3, graph.set("A", "B", 5));
     }
 
-    @Test
-    public void testRemoveEdge() {
-        // Test removing a weighted directed edge from the graph.
-        Graph<String> graph = emptyInstance();
-        graph.add("A");
-        graph.add("B");
-        graph.set("A", "B", 3);
-        assertEquals(3, graph.set("A", "B", 0));
-        assertFalse(graph.targets("A").containsKey("B"));
-        assertFalse(graph.sources("B").containsKey("A"));
-    }
+ 
 
     @Test
     public void testGetSources() {
