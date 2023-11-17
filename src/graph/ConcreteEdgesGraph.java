@@ -6,6 +6,7 @@ package graph;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,124 +20,111 @@ import java.util.Set;
 
 // ConcreteEdgesGraph class
 
+//ConcreteEdgesGraph class
 public class ConcreteEdgesGraph implements Graph<String> {
 
-    private final Set<String> vertices = new HashSet<>();
-    private final List<Edge> edges = new ArrayList<>();
+ private final Set<String> vertices = new HashSet<>();
+ private final List<Edge> edges = new ArrayList<>();
 
-    // Abstraction function:
-    // Represents a weighted directed graph with labeled vertices and edges.
-    // Representation invariant:
-    // Edges in the 'edges' list must connect vertices in 'vertices'.
-    // Safety from rep exposure:
-    // All fields are private. Defensive copies are used where needed.
+ // Abstraction function:
+ // Represents a weighted directed graph with labeled vertices and edges.
+ // Representation invariant:
+ // Edges in the 'edges' list must connect vertices in 'vertices'.
+ // Safety from rep exposure:
+ // All fields are private. Defensive copies are used where needed.
 
-    // TODO constructor
-    // Constructor
-    public ConcreteEdgesGraph() {
-        // TODO: Initialize the graph if needed
-        // (no specific initialization needed for this example)
-    }
+ // Constructor
+ public ConcreteEdgesGraph() {
+     // Initialize the graph if needed
+ }
 
-    // TODO checkRep
+ // Representation invariant check
+ private void checkRep() {
+     for (Edge edge : edges) {
+         assert vertices.contains(edge.getSource()) : "Source vertex not in vertices set";
+         assert vertices.contains(edge.getTarget()) : "Target vertex not in vertices set";
+     }
+ }
 
-    // Representation invariant check
-    private void checkRep() {
-        // TODO: Check and assert the representation invariant
-        for (Edge edge : edges) {
-            assert vertices.contains(edge.getSource()) : "Source vertex not in vertices set";
-            assert vertices.contains(edge.getTarget()) : "Target vertex not in vertices set";
-        }
-    }
+ @Override
+ public boolean add(String vertex) {
+     if (vertices.add(vertex)) {
+         checkRep();
+         return true;
+     }
+     return false;
+ }
 
-    @Override
-    public boolean add(String vertex) {
-        // TODO: Implement the add method
-        if (vertices.add(vertex)) {
-            checkRep();
-            return true;
-        }
-        return false;
-    }
+ @Override
+ public int set(String source, String target, int weight) {
+     Iterator<Edge> iterator = edges.iterator();
+     while (iterator.hasNext()) {
+         Edge edge = iterator.next();
+         if (edge.getSource().equals(source) && edge.getTarget().equals(target)) {
+             int previousWeight = edge.getWeight();
+             iterator.remove(); // Use iterator to safely remove the element
+             edges.add(new Edge(source, target, weight));
+             vertices.add(source);
+             vertices.add(target);
+             checkRep(); // Call checkRep after modification
+             return previousWeight;
+         }
+     }
+     edges.add(new Edge(source, target, weight));
+     vertices.add(source);
+     vertices.add(target);
+     checkRep(); // Call checkRep after modification
+     return 0;
+ }
 
-    @Override
-    public int set(String source, String target, int weight) {
-        // TODO: Implement the set method
-        Edge newEdge = new Edge(source, target, weight);
-        int previousWeight = 0;
+ @Override
+ public boolean remove(String vertex) {
+     if (vertices.remove(vertex)) {
+         edges.removeIf(edge -> edge.getSource().equals(vertex) || edge.getTarget().equals(vertex));
+         checkRep(); // Call checkRep after modification
+         return true;
+     }
+     return false;
+ }
 
-        // Check if the edge already exists
-        for (Edge edge : edges) {
-            if (edge.getSource().equals(source) && edge.getTarget().equals(target)) {
-                previousWeight = edge.getWeight();
-                edges.remove(edge);
-                break;
-            }
-        }
+ @Override
+ public Set<String> vertices() {
+     return new HashSet<>(vertices);
+ }
 
-        // Add the new edge
-        edges.add(newEdge);
-        vertices.add(source);
-        vertices.add(target);
+ @Override
+ public Map<String, Integer> sources(String target) {
+     Map<String, Integer> sourceMap = new HashMap<>();
+     for (Edge edge : edges) {
+         if (edge.getTarget().equals(target)) {
+             sourceMap.put(edge.getSource(), edge.getWeight());
+         }
+     }
+     return sourceMap;
+ }
 
-        checkRep();
-        return previousWeight;
-    }
+ @Override
+ public Map<String, Integer> targets(String source) {
+     Map<String, Integer> targetMap = new HashMap<>();
+     for (Edge edge : edges) {
+         if (edge.getSource().equals(source)) {
+             targetMap.put(edge.getTarget(), edge.getWeight());
+         }
+     }
+     return targetMap;
+ }
 
-    @Override
-    public boolean remove(String vertex) {
-        // TODO: Implement the remove method
-        if (vertices.remove(vertex)) {
-            // Remove edges connected to the vertex
-            edges.removeIf(edge -> edge.getSource().equals(vertex) || edge.getTarget().equals(vertex));
-            checkRep();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public Set<String> vertices() {
-        // TODO: Implement the vertices method
-        return new HashSet<>(vertices);
-    }
-
-    @Override
-    public Map<String, Integer> sources(String target) {
-        // TODO: Implement the sources method
-        Map<String, Integer> sourceMap = new HashMap<>();
-        for (Edge edge : edges) {
-            if (edge.getTarget().equals(target)) {
-                sourceMap.put(edge.getSource(), edge.getWeight());
-            }
-        }
-        return sourceMap;
-    }
-
-    @Override
-    public Map<String, Integer> targets(String source) {
-        // TODO: Implement the targets method
-        Map<String, Integer> targetMap = new HashMap<>();
-        for (Edge edge : edges) {
-            if (edge.getSource().equals(source)) {
-                targetMap.put(edge.getTarget(), edge.getWeight());
-            }
-        }
-        return targetMap;
-    }
-
-    // TODO toString()
-    @Override
-    public String toString() {
-        // TODO: Implement the toString method
-        StringBuilder result = new StringBuilder();
-        for (Edge edge : edges) {
-            result.append(edge.toString()).append("\n");
-        }
-        return result.toString();
-    }
-
+ // toString()
+ @Override
+ public String toString() {
+     StringBuilder result = new StringBuilder();
+     for (Edge edge : edges) {
+         result.append(edge.toString()).append("\n");
+     }
+     return result.toString();
+ }
 }
+
 
 /**
  * TODO specification
