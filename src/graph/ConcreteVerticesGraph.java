@@ -7,57 +7,165 @@ import java.util.*;
 
 /**
  * An implementation of Graph.
- * 
- * <p>
- * PS2 instructions: you MUST use the provided rep.
+ *
+ * <p>PS2 instructions: you MUST use the provided rep.
  */
 public class ConcreteVerticesGraph implements Graph<String> {
 
     private final List<Vertex> vertices = new ArrayList<>();
 
     // Abstraction function:
-    // TODO
+    //   Represents a mutable weighted directed graph with labeled vertices.
+    //   Each Vertex in the 'vertices' list represents a vertex in the graph.
+
     // Representation invariant:
-    // TODO
+    //   - Vertices in 'vertices' must have distinct labels.
+    //   - Edges must have non-negative weights.
+    //   - No self-loops (edges where source and target vertices are the same).
+
     // Safety from rep exposure:
-    // TODO
+    //   - 'vertices' is marked as private final.
+    //   - Accessor methods ensure safe access to internal data structures.
 
-    // TODO constructor
+    // Constructor
+    public ConcreteVerticesGraph() {
 
-    // TODO checkRep
+    }
+
+    // Check representation invariant
+    private void checkRep() {
+        // Check for distinct labels
+        Set<String> labels = new HashSet<>();
+        for (Vertex v : vertices) {
+            if (!labels.add(v.getLabel())) {
+                throw new RuntimeException("Duplicate vertex label found.");
+            }
+        }
+        // Check for other representation invariants
+        for (Vertex v : vertices) {
+            for (Map.Entry<Vertex, Integer> entry : v.getEdges().entrySet()) {
+                if (entry.getValue() < 0) {
+                    throw new RuntimeException("Edge weight is negative.");
+                }
+                if (entry.getKey() == v) {
+                    throw new RuntimeException("Self-loop detected.");
+                }
+            }
+        }
+    }
 
     @Override
     public boolean add(String vertex) {
-        throw new RuntimeException("not implemented");
+        for (Vertex v : vertices) {
+            if (v.getLabel().equals(vertex)) {
+                return false; // Vertex with the same label already exists
+            }
+        }
+        vertices.add(new Vertex(vertex));
+        checkRep();
+        return true;
     }
 
     @Override
     public int set(String source, String target, int weight) {
-        throw new RuntimeException("not implemented");
+        Vertex sourceVertex = findVertex(source);
+        Vertex targetVertex = findVertex(target);
+
+        if (sourceVertex == null || targetVertex == null) {
+            return 0; // Either source or target vertex not found
+        }
+
+        int previousWeight = sourceVertex.getEdges().getOrDefault(targetVertex, 0);
+
+        if (weight != 0) {
+            sourceVertex.addEdge(targetVertex, weight);
+        } else {
+            sourceVertex.removeEdge(targetVertex);
+        }
+
+        checkRep();
+        return previousWeight;
     }
 
     @Override
     public boolean remove(String vertex) {
-        throw new RuntimeException("not implemented");
+        Iterator<Vertex> iterator = vertices.iterator();
+        while (iterator.hasNext()) {
+            Vertex v = iterator.next();
+            if (v.getLabel().equals(vertex)) {
+                iterator.remove();
+                checkRep();
+                return true;
+            }
+        }
+        return false; // Vertex not found
     }
 
     @Override
     public Set<String> vertices() {
-        throw new RuntimeException("not implemented");
+        Set<String> result = new HashSet<>();
+        for (Vertex v : vertices) {
+            result.add(v.getLabel());
+        }
+        checkRep();
+        return result;
     }
 
     @Override
     public Map<String, Integer> sources(String target) {
-        throw new RuntimeException("not implemented");
+        Map<String, Integer> result = new HashMap<>();
+        Vertex targetVertex = findVertex(target);
+
+        if (targetVertex == null) {
+            return result; // Target vertex not found
+        }
+
+        for (Vertex v : vertices) {
+            int weight = v.getEdges().getOrDefault(targetVertex, 0);
+            if (weight != 0) {
+                result.put(v.getLabel(), weight);
+            }
+        }
+
+        checkRep();
+        return result;
     }
 
     @Override
     public Map<String, Integer> targets(String source) {
-        throw new RuntimeException("not implemented");
+        Map<String, Integer> result = new HashMap<>();
+        Vertex sourceVertex = findVertex(source);
+
+        if (sourceVertex == null) {
+            return result; // Source vertex not found
+        }
+
+        for (Map.Entry<Vertex, Integer> entry : sourceVertex.getEdges().entrySet()) {
+            result.put(entry.getKey().getLabel(), entry.getValue());
+        }
+
+        checkRep();
+        return result;
     }
 
-    // TODO toString()
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Vertex v : vertices) {
+            sb.append(v.toString()).append("\n");
+        }
+        return sb.toString();
+    }
 
+    // Helper method to find a vertex by label
+    private Vertex findVertex(String label) {
+        for (Vertex v : vertices) {
+            if (v.getLabel().equals(label)) {
+                return v;
+            }
+        }
+        return null;
+    }
 }
 
 /**
